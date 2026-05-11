@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 100" width="520" height="100">
+  <rect width="520" height="100" fill="#080808"/>
+  <text
+    x="4"
+    y="78"
+    font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Helvetica, Arial, sans-serif"
+    font-size="80"
+    font-weight="800"
+    letter-spacing="-3"
+    fill="#ffffff"
+  >self<tspan fill="#f97316">ware</tspan></text>
+</svg>
