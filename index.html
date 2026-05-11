@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selfware: One hub. All your data. Total clarity.</title>
+    <meta name="description" content="A custom internal app built for cold email agencies. One hub for your entire operation: campaigns, leads, clients, analytics, and an AI advisor that tells you exactly where to focus.">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #080808;
+            --bg-2: #101010;
+            --bg-3: #1a1a1a;
+            --bg-4: #222222;
+            --text: #ffffff;
+            --muted: #666666;
+            --muted-2: #999999;
+            --accent: #4F6EF7;
+            --accent-light: #7B97FA;
+            --accent-dim: rgba(79,110,247,0.12);
+            --border: rgba(255,255,255,0.07);
+            --border-2: rgba(255,255,255,0.12);
+            --border-accent: rgba(79,110,247,0.28);
+            --green: #22c55e;
+            --red: #ef4444;
+            --yellow: #f59e0b;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Helvetica, sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* ── Banner ── */
+        .banner {
+            background: var(--accent);
+            color: white;
+            text-align: center;
+            padding: 11px 20px;
+            font-size: 13.5px;
+            font-weight: 500;
+            letter-spacing: 0.1px;
+        }
+        .banner a { color: white; text-decoration: underline; text-underline-offset: 3px; }
+
+        /* ── Nav ── */
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 64px;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: rgba(8,8,8,0.94);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: white;
+            text-decoration: none;
+        }
+        .logo span { color: var(--accent-light); }
+
+        .nav-links {
+            display: flex;
+            gap: 36px;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--muted-2);
+            text-decoration: none;
+            font-size: 14.5px;
+            transition: color 0.18s;
+        }
+        .nav-links a:hover { color: white; }
+
+        .btn-primary {
+            background: white;
+            color: #080808;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13.5px;
+            text-decoration: none;
+            transition: opacity 0.18s;
+            display: inline-block;
+        }
+        .btn-primary:hover { opacity: 0.85; }
+
+        .btn-accent {
+            background: var(--accent);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 9px;
+            font-weight: 700;
+            font-size: 15px;
+            text-decoration: none;
+            transition: opacity 0.18s;
+            display: inline-block;
+        }
+        .btn-accent:hover { opacity: 0.85; }
+
+        .btn-ghost {
+            color: var(--muted-2);
+            padding: 15px 4px;
+            font-weight: 500;
+            font-size: 15px;
+            text-decoration: none;
+            transition: color 0.18s;
+            display: inline-block;
+        }
+        .btn-ghost:hover { color: white; }
+
+        /* ── Typography ── */
+        .label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--accent-light);
+            margin-bottom: 18px;
+            display: block;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: clamp(52px, 6.5vw, 100px);
+            font-weight: 900;
+            line-height: 1.01;
+            letter-spacing: -3.5px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: clamp(36px, 4.2vw, 64px);
+            font-weight: 900;
+            line-height: 1.08;
+            letter-spacing: -2px;
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 15.5px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+            margin-bottom: 8px;
+            color: white;
+        }
+
+        p { color: var(--muted-2); line-height: 1.8; }
+
+        /* ── Layout ── */
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 56px;
+        }
+
+        .section-pad { padding: 112px 0; }
+
+        .section-intro {
+            text-align: center;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        .section-intro p {
+            font-size: 16.5px;
+            margin-top: 20px;
+            color: var(--muted-2);
+            line-height: 1.8;
+        }
+
+        .divider { height: 1px; background: var(--border); }
+
+        /* ════════════════════════════════════════
+           HERO
+        ════════════════════════════════════════ */
+        #hero-wrap {
+            position: relative;
+            overflow: hidden;
+            min-height: 92vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Dashboard mockup – lives in the background */
+        .hero-mockup {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 40px 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .mockup-window {
+            width: 100%;
+            max-width: 1060px;
+            background: #111318;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px 14px 0 0;
+            overflow: hidden;
+            box-shadow: 0 40px 120px rgba(0,0,0,0.8);
+        }
+
+        .mockup-titlebar {
+            background: #1c1e24;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .mockup-dot { width: 11px; height: 11px; border-radius: 50%; }
+        .mockup-dot.r { background: #ef4444; }
+        .mockup-dot.y { background: #f59e0b; }
+        .mockup-dot.g { background: #22c55e; }
+
+        .mockup-url {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+            padding: 4px 12px;
+            font-size: 11px;
+            color: var(--muted-2);
+            margin: 0 12px;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .mockup-body {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            height: 460px;
+        }
+
+        .mockup-sidebar {
+            background: #0e1016;
+            border-right: 1px solid rgba(255,255,255,0.05);
+            padding: 20px 0;
+        }
+
+        .mockup-sidebar-logo {
+            padding: 0 18px 20px;
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--accent-light);
+            letter-spacing: -0.3px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 12px;
+        }
+
+        .mockup-nav-item {
+            padding: 9px 18px;
+            font-size: 12px;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .mockup-nav-item.active {
+            color: white;
+            background: rgba(79,110,247,0.12);
+            border-left: 2px solid var(--accent);
+        }
+
+        .mockup-nav-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0.5;
+            flex-shrink: 0;
+        }
+
+        .mockup-nav-item.active .mockup-nav-dot { opacity: 1; background: var(--accent-light); }
+
+        .mockup-main {
+            padding: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .mockup-topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .mockup-page-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .mockup-badge {
+            background: rgba(34,197,94,0.15);
+            color: var(--green);
+            border: 1px solid rgba(34,197,94,0.25);
+            font-size: 10.5px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 100px;
+        }
+
+        .mockup-kpis {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .mockup-kpi {
+            background: #181b22;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .mockup-kpi-label { font-size: 10px; color: var(--muted); margin-bottom: 6px; }
+        .mockup-kpi-val { font-size: 20px; font-weight: 800; color: white; letter-spacing: -0.8px; }
+        .mockup-kpi-delta { font-size: 10px; margin-top: 3px; }
+        .mockup-kpi-delta.up { color: var(--green); }
+        .mockup-kpi-delta.down { color: var(--red); }
+
+        .mockup-content-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .mockup-chart-card {
+            background: #181b22;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px;
+            padding: 14px;
+            overflow: hidden;
+        }
+
+        .mockup-chart-title { font-size: 11px; font-weight: 600; color: var(--muted-2); margin-bottom: 12px; }
+
+        .mockup-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 5px;
+            height: 80px;
+        }
+
+        .mockup-bar {
+            flex: 1;
+            border-radius: 4px 4px 0 0;
+            background: var(--accent);
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .mockup-ai-card {
+            background: linear-gradient(135deg, #111827 0%, #0d1320 100%);
+            border: 1px solid var(--border-accent);
+            border-radius: 10px;
+            padding: 14px;
+            overflow: hidden;
+        }
+
+        .mockup-ai-header {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 10px;
+        }
+
+        .mockup-ai-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            box-shadow: 0 0 6px var(--accent);
+        }
+
+        .mockup-ai-title { font-size: 11px; font-weight: 700; color: var(--accent-light); }
+
+        .mockup-insight {
+            background: rgba(255,255,255,0.04);
+            border-radius: 7px;
+            padding: 8px 10px;
+            font-size: 10.5px;
+            color: var(--muted-2);
+            line-height: 1.5;
+            margin-bottom: 6px;
+        }
+
+        .mockup-insight strong { color: white; }
+        .mockup-insight:last-child { margin-bottom: 0; }
+
+        /* Dark gradient overlay that fades the mockup into the hero */
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(8,8,8,0.6) 0%,
+                rgba(8,8,8,0.55) 40%,
+                rgba(8,8,8,0.82) 70%,
+                rgba(8,8,8,1) 100%
+            );
+            z-index: 1;
+        }
+
+        /* Hero content sits above overlay */
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 52px 56px 72px;
+            max-width: 860px;
+            background: rgba(8,8,8,0.6);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 24px;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 24px 80px rgba(0,0,0,0.5);
+        }
+
+        h1 { text-shadow: 0 2px 24px rgba(0,0,0,0.6); }
+
+        .hero-content .subheadline {
+            font-size: 17.5px;
+            color: var(--muted-2);
+            max-width: 580px;
+            margin: 24px auto 44px;
+            line-height: 1.75;
+            text-align: center;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 0;
+            margin-top: 72px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 0 48px;
+            border-right: 1px solid var(--border);
+        }
+        .stat:last-child { border-right: none; }
+
+        .stat .num {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            color: white;
+        }
+        .stat .desc {
+            font-size: 12.5px;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+
+        /* ════════════════════════════════════════
+           PROBLEM
+        ════════════════════════════════════════ */
+        .tool-scatter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 44px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tool-tag {
+            background: var(--bg-3);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            color: var(--muted);
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        .tool-connector {
+            font-size: 13px;
+            color: var(--muted);
+            font-style: italic;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 56px;
+        }
+
+        .card {
+            background: var(--bg-3);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: border-color 0.2s;
+            text-align: left;
+        }
+        .card:hover { border-color: var(--border-accent); }
+
+        .card-icon {
+            font-size: 24px;
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .card p { font-size: 14.5px; }
+
+        /* ── Philosophy callout ── */
+        .philosophy-box {
+            background: linear-gradient(135deg, #111827 0%, #0c1220 100%);
+            border: 1px solid var(--border-accent);
+            border-radius: 20px;
+            padding: 72px 64px;
+            text-align: center;
+            margin-top: 64px;
+        }
+
+        .philosophy-box .big-line {
+            font-size: clamp(22px, 2.8vw, 38px);
+            font-weight: 800;
+            color: white;
+            line-height: 1.45;
+            letter-spacing: -0.8px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .philosophy-box .sub {
+            font-size: 16.5px;
+            max-width: 560px;
+            margin: 22px auto 0;
+            line-height: 1.8;
+            color: var(--muted-2);
+        }
+
+        /* ════════════════════════════════════════
+           SOLUTION
+        ════════════════════════════════════════ */
+        .triple {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2px;
+            background: var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-top: 56px;
+        }
+
+        .triple-cell {
+            background: var(--bg-2);
+            padding: 44px 36px;
+            text-align: center;
+        }
+
+        .triple-cell .big { font-size: 44px; font-weight: 900; color: white; letter-spacing: -1.5px; }
+        .triple-cell .sub { font-size: 14px; color: var(--muted); margin-top: 6px; }
+
+        /* ── Versus ── */
+        .versus-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 48px;
+        }
+
+        .versus-card {
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 24px 26px;
+            text-align: left;
+        }
+
+        .versus-card .competitor {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .versus-card .verdict {
+            font-size: 14px;
+            color: var(--muted-2);
+            line-height: 1.7;
+        }
+
+        /* ════════════════════════════════════════
+           AI ADVISOR SECTION
+        ════════════════════════════════════════ */
+        #ai-advisor {
+            background: var(--bg);
+        }
+
+        .ai-hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-dim);
+            border: 1px solid var(--border-accent);
+            border-radius: 100px;
+            padding: 6px 16px;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--accent-light);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .ai-pulse {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            box-shadow: 0 0 6px var(--accent);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .ai-section-intro {
+            text-align: center;
+            max-width: 760px;
+            margin: 0 auto 64px;
+        }
+
+        .ai-section-intro p {
+            font-size: 17px;
+            color: var(--muted-2);
+            margin-top: 20px;
+            line-height: 1.8;
+        }
+
+        .ai-demo {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(150deg, #0f1320 0%, #0b101c 100%);
+            border: 1px solid var(--border-accent);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 80px rgba(79,110,247,0.08);
+        }
+
+        .ai-demo-header {
+            background: rgba(79,110,247,0.06);
+            border-bottom: 1px solid var(--border-accent);
+            padding: 16px 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-demo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-dim);
+            border: 1px solid var(--border-accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+        }
+
+        .ai-demo-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .ai-demo-sub {
+            font-size: 12px;
+            color: var(--muted-2);
+        }
+
+        .ai-demo-status {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .ai-demo-status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .ai-demo-body {
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ai-message {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .ai-message.user { flex-direction: row-reverse; }
+
+        .ai-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: var(--accent-dim);
+            border: 1px solid var(--border-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .ai-message.user .ai-avatar {
+            background: var(--bg-3);
+            border-color: var(--border);
+        }
+
+        .ai-bubble {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 18px;
+            font-size: 14px;
+            color: var(--muted-2);
+            line-height: 1.7;
+            max-width: 680px;
+        }
+
+        .ai-message.user .ai-bubble {
+            background: var(--bg-3);
+            color: var(--muted-2);
+        }
+
+        .ai-bubble strong { color: white; font-weight: 600; }
+
+        .ai-recommendation {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-top: 8px;
+            font-size: 13.5px;
+            color: var(--muted-2);
+            line-height: 1.65;
+        }
+
+        .ai-rec-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .ai-rec-tag {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .ai-rec-tag.double-down {
+            background: rgba(34,197,94,0.12);
+            color: var(--green);
+            border: 1px solid rgba(34,197,94,0.2);
+        }
+
+        .ai-rec-tag.cut {
+            background: rgba(239,68,68,0.12);
+            color: var(--red);
+            border: 1px solid rgba(239,68,68,0.2);
+        }
+
+        .ai-rec-tag.watch {
+            background: rgba(245,158,11,0.12);
+            color: var(--yellow);
+            border: 1px solid rgba(245,158,11,0.2);
+        }
+
+        .ai-rec-title { font-size: 13px; font-weight: 700; color: white; }
+
+        .ai-data-points {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .ai-data-chip {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 3px 10px;
+            font-size: 11.5px;
+            color: var(--muted-2);
+        }
+
+        .ai-data-chip span { color: white; font-weight: 600; }
+
+        .ai-capabilities {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 56px;
+        }
+
+        .ai-cap {
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 28px 24px;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+
+        .ai-cap:hover { border-color: var(--border-accent); }
+
+        .ai-cap-icon {
+            font-size: 28px;
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .ai-cap h3 { font-size: 14.5px; margin-bottom: 8px; text-align: center; }
+        .ai-cap p { font-size: 13.5px; line-height: 1.65; text-align: center; }
+
+        /* ════════════════════════════════════════
+           FEATURES
+        ════════════════════════════════════════ */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 56px;
+        }
+
+        .feature-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 26px 26px 30px;
+            transition: border-color 0.2s;
+            text-align: left;
+        }
+        .feature-card:hover { border-color: var(--border-accent); }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-dim);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-bottom: 14px;
+        }
+
+        .feature-card h3 { font-size: 14.5px; margin-bottom: 8px; }
+        .feature-card p { font-size: 13.5px; line-height: 1.7; }
+
+        /* ════════════════════════════════════════
+           FOUNDER
+        ════════════════════════════════════════ */
+        .founder-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: start;
+            margin-top: 56px;
+        }
+
+        .founder-quote {
+            font-size: clamp(19px, 1.8vw, 25px);
+            font-weight: 700;
+            color: white;
+            line-height: 1.5;
+            letter-spacing: -0.4px;
+            border-left: 3px solid var(--accent);
+            padding-left: 24px;
+            margin-bottom: 28px;
+        }
+
+        .founder-body { font-size: 15.5px; color: var(--muted-2); line-height: 1.85; }
+        .founder-body + .founder-body { margin-top: 16px; }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .metric-card {
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px;
+            text-align: center;
+        }
+
+        .metric-card .num {
+            font-size: 30px;
+            font-weight: 900;
+            color: var(--accent-light);
+            letter-spacing: -1px;
+        }
+        .metric-card .desc {
+            font-size: 12.5px;
+            color: var(--muted);
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+
+        .founder-note {
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 26px 28px;
+            margin-top: 16px;
+            text-align: left;
+        }
+        .founder-note p { font-size: 14px; color: var(--muted-2); line-height: 1.7; }
+        .founder-note .author { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
+
+        /* ════════════════════════════════════════
+           PRICING
+        ════════════════════════════════════════ */
+        .pricing-wrap {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 20px;
+            margin-top: 56px;
+            max-width: 840px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .pricing-card {
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid var(--border);
+            text-align: left;
+        }
+
+        .pricing-card.featured {
+            background: linear-gradient(150deg, #111827 0%, #0c1220 100%);
+            border-color: var(--border-accent);
+        }
+
+        .pricing-card.standard { background: var(--bg-2); }
+
+        .pricing-card .plan-name {
+            font-size: 10.5px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent-light);
+            margin-bottom: 14px;
+        }
+
+        .pricing-card .price {
+            font-size: 52px;
+            font-weight: 900;
+            letter-spacing: -3px;
+            color: white;
+            line-height: 1;
+        }
+
+        .pricing-card .price sup { font-size: 22px; font-weight: 700; letter-spacing: 0; vertical-align: super; }
+        .pricing-card .price sub { font-size: 20px; font-weight: 500; letter-spacing: 0; }
+        .pricing-card .payment-note { font-size: 13px; color: var(--muted); margin-top: 8px; margin-bottom: 28px; }
+
+        .pricing-list { list-style: none; }
+        .pricing-list li {
+            font-size: 14px;
+            color: var(--muted-2);
+            padding: 9px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .pricing-list li::before { content: "✓"; color: var(--accent-light); font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+
+        .pricing-card .cta-wrap { margin-top: 28px; }
+        .pricing-card .btn-accent,
+        .pricing-card .btn-primary { width: 100%; text-align: center; display: block; }
+
+        .pricing-note {
+            font-size: 13.5px;
+            color: var(--muted);
+            margin-top: 28px;
+            text-align: center;
+        }
+
+        /* ════════════════════════════════════════
+           CTA + FOOTER
+        ════════════════════════════════════════ */
+        .final-cta {
+            text-align: center;
+            padding: 120px 56px;
+        }
+
+        .final-cta h2 { margin-bottom: 20px; }
+        .final-cta > p { font-size: 17px; max-width: 480px; margin: 0 auto 40px; }
+
+        .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; align-items: center; }
+
+        .cta-sub { margin-top: 22px; font-size: 13.5px; color: var(--muted); }
+        .cta-sub a { color: var(--accent-light); text-decoration: none; }
+        .cta-sub a:hover { text-decoration: underline; }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 36px 64px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .footer-logo { font-size: 17px; font-weight: 800; color: white; letter-spacing: -0.3px; }
+
+        /* ════════════════════════════════════════
+           RESPONSIVE
+        ════════════════════════════════════════ */
+        @media (max-width: 960px) {
+            nav { padding: 16px 24px; }
+            .nav-links { display: none; }
+            .container { padding: 0 24px; }
+            .section-pad { padding: 72px 0; }
+            .final-cta { padding: 80px 24px; }
+            footer { padding: 28px 24px; flex-direction: column; gap: 12px; text-align: center; }
+            .problem-grid,
+            .features-grid,
+            .founder-layout,
+            .pricing-wrap,
+            .versus-grid,
+            .ai-capabilities { grid-template-columns: 1fr; }
+            .revops-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+            .revops-compare { grid-template-columns: 1fr !important; }
+            .triple { grid-template-columns: 1fr; }
+            .hero-stats { flex-direction: column; gap: 24px; align-items: center; }
+            .stat { border-right: none; border-bottom: 1px solid var(--border); padding: 0 0 20px; }
+            .stat:last-child { border-bottom: none; }
+            .philosophy-box { padding: 40px 28px; }
+            .metrics-grid { grid-template-columns: 1fr 1fr; }
+            .mockup-body { grid-template-columns: 1fr; }
+            .mockup-sidebar { display: none; }
+            .hero-mockup { padding-top: 80px; }
+            .mockup-kpis { grid-template-columns: 1fr 1fr; }
+            .mockup-content-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Banner -->
+<div class="banner">
+    Now accepting June builds. 3 spots remaining. <a href="#apply">Apply today →</a>
+</div>
+
+<!-- Nav -->
+<nav>
+    <a href="#" class="logo">self<span>ware</span></a>
+    <ul class="nav-links">
+        <li><a href="#problem">The Problem</a></li>
+        <li><a href="#ai-advisor">AI Advisor</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#story">Founder</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+    </ul>
+    <a href="#apply" class="btn-primary">Book a Demo</a>
+</nav>
+
+<!-- ════════════════════════════════════════
+     HERO
+════════════════════════════════════════ -->
+<div id="hero-wrap">
+
+    <!-- Dashboard mockup in background -->
+    <div class="hero-mockup" aria-hidden="true">
+        <div class="mockup-window">
+            <div class="mockup-titlebar">
+                <div class="mockup-dot r"></div>
+                <div class="mockup-dot y"></div>
+                <div class="mockup-dot g"></div>
+                <div class="mockup-url">app.selfware.co/dashboard</div>
+            </div>
+            <div class="mockup-body">
+                <div class="mockup-sidebar">
+                    <div class="mockup-sidebar-logo">selfware</div>
+                    <div class="mockup-nav-item active">
+                        <div class="mockup-nav-dot"></div>Dashboard
+                    </div>
+                    <div class="mockup-nav-item">
+                        <div class="mockup-nav-dot"></div>Campaigns
+                    </div>
+                    <div class="mockup-nav-item">
+                        <div class="mockup-nav-dot"></div>Leads
+                    </div>
+                    <div class="mockup-nav-item">
+                        <div class="mockup-nav-dot"></div>AI Advisor
+                    </div>
+                    <div class="mockup-nav-item">
+                        <div class="mockup-nav-dot"></div>CRM
+                    </div>
+                    <div class="mockup-nav-item">
+                        <div class="mockup-nav-dot"></div>Clients
+                    </div>
+                    <div class="mockup-nav-item">
+                        <div class="mockup-nav-dot"></div>LinkedIn
+                    </div>
+                    <div class="mockup-nav-item">
+                        <div class="mockup-nav-dot"></div>Analytics
+                    </div>
+                </div>
+                <div class="mockup-main">
+                    <div class="mockup-topbar">
+                        <div class="mockup-page-title">Agency Dashboard</div>
+                        <div class="mockup-badge">● Live</div>
+                    </div>
+                    <div class="mockup-kpis">
+                        <div class="mockup-kpi">
+                            <div class="mockup-kpi-label">Reply Rate (7d)</div>
+                            <div class="mockup-kpi-val">6.8%</div>
+                            <div class="mockup-kpi-delta up">↑ 1.2% vs last week</div>
+                        </div>
+                        <div class="mockup-kpi">
+                            <div class="mockup-kpi-label">Meetings Booked</div>
+                            <div class="mockup-kpi-val">24</div>
+                            <div class="mockup-kpi-delta up">↑ 6 vs last week</div>
+                        </div>
+                        <div class="mockup-kpi">
+                            <div class="mockup-kpi-label">Cost per Meeting</div>
+                            <div class="mockup-kpi-val">$183</div>
+                            <div class="mockup-kpi-delta down">↓ $41 vs last week</div>
+                        </div>
+                        <div class="mockup-kpi">
+                            <div class="mockup-kpi-label">Active Campaigns</div>
+                            <div class="mockup-kpi-val">11</div>
+                            <div class="mockup-kpi-delta up">3 clients · 8 niches</div>
+                        </div>
+                    </div>
+                    <div class="mockup-content-row">
+                        <div class="mockup-chart-card">
+                            <div class="mockup-chart-title">Reply Rate by Niche (last 30 days)</div>
+                            <div class="mockup-bars">
+                                <div class="mockup-bar" style="height:45%; opacity:0.5;"></div>
+                                <div class="mockup-bar" style="height:62%;"></div>
+                                <div class="mockup-bar" style="height:78%; background:#7B97FA;"></div>
+                                <div class="mockup-bar" style="height:38%; opacity:0.4;"></div>
+                                <div class="mockup-bar" style="height:55%;"></div>
+                                <div class="mockup-bar" style="height:88%; background:#7B97FA;"></div>
+                                <div class="mockup-bar" style="height:42%; opacity:0.4;"></div>
+                                <div class="mockup-bar" style="height:70%;"></div>
+                            </div>
+                        </div>
+                        <div class="mockup-ai-card">
+                            <div class="mockup-ai-header">
+                                <div class="mockup-ai-dot"></div>
+                                <div class="mockup-ai-title">AI Advisor: 3 new insights</div>
+                            </div>
+                            <div class="mockup-insight"><strong>Double down:</strong> Tech SaaS converting 4.2x vs Healthcare. Shift list build to this niche immediately.</div>
+                            <div class="mockup-insight"><strong>Pause Campaign #7:</strong> Cost per meeting at $340, 86% above target. ICP needs refinement first.</div>
+                            <div class="mockup-insight"><strong>Reply pattern:</strong> "Founder to founder" subject lines down 18% this week across 4 campaigns.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dark overlay -->
+    <div class="hero-overlay"></div>
+
+    <!-- Hero content -->
+    <div class="hero-content">
+        <span class="label">For cold email & lead gen agencies</span>
+        <h1>One hub.<br>All your data.<br>Total clarity.</h1>
+        <p class="subheadline">
+            A custom app built for your agency, not adapted from a generic tool. One place where every campaign, lead, client, and dollar lives. Delivered in 2 weeks. Yours to keep.
+        </p>
+        <div class="hero-actions">
+            <a href="#apply" class="btn-accent">Book a Demo</a>
+            <a href="#features" class="btn-ghost">See what's included →</a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="num">2 weeks</div>
+                <div class="desc">From kickoff to live</div>
+            </div>
+            <div class="stat">
+                <div class="num">5+ tools</div>
+                <div class="desc">Replaced by one app</div>
+            </div>
+            <div class="stat">
+                <div class="num">1 login</div>
+                <div class="desc">Your entire agency</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════
+     PROBLEM
+════════════════════════════════════════ -->
+<section id="problem" style="background: var(--bg-2);">
+    <div class="container section-pad">
+        <div class="section-intro">
+            <span class="label">The problem</span>
+            <h2>Your data is in five places.<br>Your answers are in none of them.</h2>
+            <p>
+                You know your campaigns are running. But you don't actually know what's working, what's not, or what to do about it. The data is scattered. Every decision is a guess.
+            </p>
+        </div>
+
+        <div class="tool-scatter">
+            <span class="tool-tag">Clay</span>
+            <span class="tool-tag">Instantly.ai</span>
+            <span class="tool-tag">Notion</span>
+            <span class="tool-tag">Your inbox</span>
+            <span class="tool-tag">Spreadsheets</span>
+            <span class="tool-tag">A CRM nobody updates</span>
+            <span class="tool-connector">→ none of it talks to each other</span>
+        </div>
+
+        <div class="problem-grid">
+            <div class="card">
+                <span class="card-icon">📊</span>
+                <h3>No single source of truth</h3>
+                <p>Reply rates in one place. Lead data in another. Client notes in a doc nobody touches. There's no way to see the full picture at once.</p>
+            </div>
+            <div class="card">
+                <span class="card-icon">🧠</span>
+                <h3>Context switching is destroying your output</h3>
+                <p>Research shows it takes 23 minutes to fully regain focus after a context switch. When you're jumping between Clay, Instantly, your CRM, and your inbox dozens of times a day, you're never actually in deep work. You're in constant recovery.</p>
+            </div>
+            <div class="card">
+                <span class="card-icon">🔍</span>
+                <h3>You can't see what's actually working</h3>
+                <p>Without consolidated data you can't break performance down by niche, region, or offer. You're making high-stakes decisions on incomplete information.</p>
+            </div>
+            <div class="card">
+                <span class="card-icon">🤝</span>
+                <h3>Clients don't have visibility either</h3>
+                <p>Update calls. Status emails. "Can you send the latest numbers?" A broken client experience that erodes trust and takes your time.</p>
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px; background:var(--border); border-radius:16px; overflow:hidden; margin-top:56px;">
+            <div style="background:var(--bg); padding:36px; text-align:center;">
+                <div style="font-size:38px; font-weight:900; color:white; letter-spacing:-1.5px;">23 min</div>
+                <div style="font-size:13px; color:var(--muted); margin-top:6px; line-height:1.5;">Average time to regain focus after a context switch</div>
+            </div>
+            <div style="background:var(--bg); padding:36px; text-align:center;">
+                <div style="font-size:38px; font-weight:900; color:white; letter-spacing:-1.5px;">40%</div>
+                <div style="font-size:13px; color:var(--muted); margin-top:6px; line-height:1.5;">Productivity lost to tool-switching and mental context shifts</div>
+            </div>
+            <div style="background:var(--bg); padding:36px; text-align:center;">
+                <div style="font-size:38px; font-weight:900; color:white; letter-spacing:-1.5px;">5+ tabs</div>
+                <div style="font-size:13px; color:var(--muted); margin-top:6px; line-height:1.5;">The average agency founder has open at any one time</div>
+            </div>
+        </div>
+
+        <div class="philosophy-box">
+            <span class="label">The shift</span>
+            <p class="big-line">
+                A couple of years ago the rational move was to hire a team.<br>Today the smart move is to build smarter infrastructure.
+            </p>
+            <p class="sub">
+                The one-person AI business is here. Founders who spend 100% of their time on strategy will outcompete founders managing teams and juggling tools, every single time.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     AI ADVISOR — CENTERPIECE
+════════════════════════════════════════ -->
+<section id="ai-advisor">
+    <div class="container section-pad">
+
+        <div class="ai-section-intro">
+            <div style="display:flex; justify-content:center; margin-bottom:24px;">
+                <div class="ai-hero-label">
+                    <div class="ai-pulse"></div>
+                    The centerpiece
+                </div>
+            </div>
+            <h2>An AI agent that reads your entire business and tells you what to do next.</h2>
+            <p>
+                Not a dashboard that shows you numbers. An agent that reads across every campaign, every reply, every lead, every client. It surfaces exactly where to focus and what to cut. Specific. Actionable. Already knowing your data.
+            </p>
+        </div>
+
+        <div class="ai-demo">
+            <div class="ai-demo-header">
+                <div class="ai-demo-icon">🤖</div>
+                <div>
+                    <div class="ai-demo-name">Selfware AI Advisor</div>
+                    <div class="ai-demo-sub">Reading across 11 campaigns · 3 clients · 847 replies · 30 days of data</div>
+                </div>
+                <div class="ai-demo-status">
+                    <div class="ai-demo-status-dot"></div>
+                    Live analysis
+                </div>
+            </div>
+            <div class="ai-demo-body">
+
+                <div class="ai-message user">
+                    <div class="ai-avatar">👤</div>
+                    <div class="ai-bubble">
+                        Where should I be focusing this week?
+                    </div>
+                </div>
+
+                <div class="ai-message">
+                    <div class="ai-avatar">🤖</div>
+                    <div class="ai-bubble">
+                        Based on your last 30 days, here's where to focus:
+
+                        <div class="ai-recommendation">
+                            <div class="ai-rec-header">
+                                <span class="ai-rec-tag double-down">Double down</span>
+                                <span class="ai-rec-title">Tech SaaS · Series A Founders</span>
+                            </div>
+                            Your Tech SaaS niche is converting at <strong>4.2x</strong> compared to Healthcare this month: reply rate 8.1% vs 1.9%. Your list building is split 40/60. Flip that ratio immediately. Every hour spent on Healthcare leads right now is burning money.
+                            <div class="ai-data-points">
+                                <div class="ai-data-chip">Reply rate <span>8.1%</span></div>
+                                <div class="ai-data-chip">Cost/meeting <span>$124</span></div>
+                                <div class="ai-data-chip">Conv. rate <span>12.4%</span></div>
+                            </div>
+                        </div>
+
+                        <div class="ai-recommendation">
+                            <div class="ai-rec-header">
+                                <span class="ai-rec-tag cut">Pause now</span>
+                                <span class="ai-rec-title">Campaign #7: Acme Corp (Healthcare)</span>
+                            </div>
+                            Cost per meeting is at <strong>$340</strong>, which is 86% above your $183 average. The ICP is too broad and the offer doesn't match the pain. Pause the sequences, fix the targeting, then relaunch. Running it longer won't fix it.
+                            <div class="ai-data-points">
+                                <div class="ai-data-chip">Cost/meeting <span>$340</span></div>
+                                <div class="ai-data-chip">Reply rate <span>1.2%</span></div>
+                                <div class="ai-data-chip">Spend this month <span>$2,100</span></div>
+                            </div>
+                        </div>
+
+                        <div class="ai-recommendation">
+                            <div class="ai-rec-header">
+                                <span class="ai-rec-tag watch">Pattern alert</span>
+                                <span class="ai-rec-title">Subject line fatigue: "Founder to founder"</span>
+                            </div>
+                            Across <strong>4 campaigns</strong>, "founder to founder" subject lines are down 18% week-over-week. The reply sentiment is still positive when they do open. It's the open rate dropping. Try repositioning the hook. I can generate 5 alternatives based on your top-performing angles.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="ai-capabilities">
+            <div class="ai-cap">
+                <span class="ai-cap-icon">📊</span>
+                <h3>Reads all your campaign data</h3>
+                <p>Reply rates, conversion rates, cost per lead, and cost per booked meeting, broken down by niche, region, and role across every campaign you're running.</p>
+            </div>
+            <div class="ai-cap">
+                <span class="ai-cap-icon">💬</span>
+                <h3>Surfaces reply patterns</h3>
+                <p>Reads every reply across every campaign. Spots what's working, what's getting ignored, and where your messaging is losing people, before you notice it yourself.</p>
+            </div>
+            <div class="ai-cap">
+                <span class="ai-cap-icon">🎯</span>
+                <h3>Tells you exactly where to focus</h3>
+                <p>Not "here are your numbers." Specific: double down here, pause this, fix that. The kind of clarity that used to require an analyst or a team. Now built into your app.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     REVOPS SECTION
+════════════════════════════════════════ -->
+<section style="background: var(--bg-2);">
+    <div class="container section-pad">
+        <div style="max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;">
+            <div>
+                <span class="label">What it replaces</span>
+                <h2 style="text-align: left; font-size: clamp(30px, 3.2vw, 50px);">The RevOps analyst you can't afford to hire.</h2>
+            </div>
+            <div>
+                <p style="font-size: 16px; line-height: 1.9; color: var(--muted-2); margin-bottom: 20px;">
+                    A good RevOps analyst pulls data from every platform, synthesizes it, and tells you exactly where your revenue is leaking and where to double down. They cost $80,000 a year, take weeks to onboard, and still need days to turn around insights.
+                </p>
+                <p style="font-size: 16px; line-height: 1.9; color: var(--muted-2); margin-bottom: 20px;">
+                    Your AI agent does the same thing in seconds. It reads across your entire operation and answers the questions that currently take you hours to figure out manually. Which campaigns are actually profitable. What your cost per meeting is by niche. Where you're losing deals and why.
+                </p>
+                <p style="font-size: 16px; line-height: 1.9; color: var(--muted-2);">
+                    The difference is it never sleeps, never needs a briefing, and lives inside the same place you run your entire agency.
+                </p>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 56px; max-width: 860px; margin-left: auto; margin-right: auto;">
+            <div style="background: var(--bg-3); border: 1px solid var(--border); border-radius: 14px; padding: 28px;">
+                <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px;">Hiring a RevOps analyst</div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div style="font-size: 14px; color: var(--muted-2); display: flex; gap: 10px; align-items: flex-start;"><span style="color: var(--red); flex-shrink:0;">✕</span> $80,000 a year minimum</div>
+                    <div style="font-size: 14px; color: var(--muted-2); display: flex; gap: 10px; align-items: flex-start;"><span style="color: var(--red); flex-shrink:0;">✕</span> Weeks to onboard and ramp up</div>
+                    <div style="font-size: 14px; color: var(--muted-2); display: flex; gap: 10px; align-items: flex-start;"><span style="color: var(--red); flex-shrink:0;">✕</span> Days to turn around a single report</div>
+                    <div style="font-size: 14px; color: var(--muted-2); display: flex; gap: 10px; align-items: flex-start;"><span style="color: var(--red); flex-shrink:0;">✕</span> Still pulling data manually from separate tools</div>
+                    <div style="font-size: 14px; color: var(--muted-2); display: flex; gap: 10px; align-items: flex-start;"><span style="color: var(--red); flex-shrink:0;">✕</span> Insights that are already outdated by delivery</div>
+                </div>
+            </div>
+            <div style="background: linear-gradient(135deg, #111827 0%, #0c1220 100%); border: 1px solid var(--border-accent); border-radius: 14px; padding: 28px;">
+                <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-light); margin-bottom: 16px;">Your Selfware AI advisor</div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div style="font-size: 14px; color: var(--muted-2); display: flex; gap: 10px; align-items: flex-start;"><span style="color: var(--green); flex-shrink:0;">✓</span> Built into your app, no extra cost</div>
+                    <div style="font-size: 14px; color: var(--muted-2); display: flex; gap: 10px; align-items: flex-start;"><span style="color: var(--green); flex-shrink:0;">✓</span> Zero onboarding, reads your data from day one</div>
+                    <div style="font-size: 14px; color: var(--muted-2); display: flex; gap: 10px; align-items: flex-start;"><span style="color: var(--green); flex-shrink:0;">✓</span> Insights in seconds, not days</div>
+                    <div style="font-size: 14px; color: var(--muted-2); display: flex; gap: 10px; align-items: flex-start;"><span style="color: var(--green); flex-shrink:0;">✓</span> All data already connected inside one app</div>
+                    <div style="font-size: 14px; color: var(--muted-2); display: flex; gap: 10px; align-items: flex-start;"><span style="color: var(--green); flex-shrink:0;">✓</span> Always live, always current, never needs a briefing</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════
+     SOLUTION
+════════════════════════════════════════ -->
+<section id="solution" style="background: var(--bg-2);">
+    <div class="container section-pad">
+        <div class="section-intro">
+            <span class="label">The solution</span>
+            <h2>A custom app built around your agency. Not a tool you adapt to.</h2>
+            <p>
+                Not a generic tool you force your workflow into. Not a Notion template. A fully custom application designed around how you actually work, where everything lives, everything connects, and the data tells you what to do next. You own it completely.
+            </p>
+        </div>
+
+        <div class="triple">
+            <div class="triple-cell">
+                <div class="big">One</div>
+                <div class="sub">login</div>
+            </div>
+            <div class="triple-cell">
+                <div class="big">One</div>
+                <div class="sub">source of truth</div>
+            </div>
+            <div class="triple-cell">
+                <div class="big">Zero</div>
+                <div class="sub">guesswork</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 72px;">
+            <div class="section-intro">
+                <span class="label">End-to-end automation</span>
+                <h2>Your entire operation. Automated in one place.</h2>
+                <p>Every step of running your agency is connected inside one app. Not stitched together with Zapier. Not manually synced across tools. One system where everything flows automatically, so you never have to be the one moving data between tabs.</p>
+            </div>
+
+            <div style="margin-top:48px; display:flex; flex-direction:column; gap:0; border:1px solid var(--border); border-radius:16px; overflow:hidden;">
+                <div style="display:grid; grid-template-columns:200px 1fr; border-bottom:1px solid var(--border);">
+                    <div style="background:var(--accent-dim); border-right:1px solid var(--border-accent); padding:24px 20px; display:flex; align-items:center;">
+                        <span style="font-size:12px; font-weight:700; color:var(--accent-light); letter-spacing:1px; text-transform:uppercase;">Lead Sourcing</span>
+                    </div>
+                    <div style="background:var(--bg-3); padding:24px 28px;">
+                        <p style="font-size:14.5px; color:var(--muted-2);">Scrape LinkedIn, auto-enrich contacts, generate personalized first lines, and push leads directly into your campaign sequences. Zero manual steps.</p>
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns:200px 1fr; border-bottom:1px solid var(--border);">
+                    <div style="background:var(--accent-dim); border-right:1px solid var(--border-accent); padding:24px 20px; display:flex; align-items:center;">
+                        <span style="font-size:12px; font-weight:700; color:var(--accent-light); letter-spacing:1px; text-transform:uppercase;">Campaign Running</span>
+                    </div>
+                    <div style="background:var(--bg-3); padding:24px 28px;">
+                        <p style="font-size:14.5px; color:var(--muted-2);">Campaigns launch and run through Instantly.ai while your dashboard tracks every reply, open, and conversion in real time. No tab switching required.</p>
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns:200px 1fr; border-bottom:1px solid var(--border);">
+                    <div style="background:var(--accent-dim); border-right:1px solid var(--border-accent); padding:24px 20px; display:flex; align-items:center;">
+                        <span style="font-size:12px; font-weight:700; color:var(--accent-light); letter-spacing:1px; text-transform:uppercase;">Reply Handling</span>
+                    </div>
+                    <div style="background:var(--bg-3); padding:24px 28px;">
+                        <p style="font-size:14.5px; color:var(--muted-2);">Replies get read, summarized, and pattern-matched automatically. The AI flags what changed, what's working, and what needs attention before you open your inbox.</p>
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns:200px 1fr; border-bottom:1px solid var(--border);">
+                    <div style="background:var(--accent-dim); border-right:1px solid var(--border-accent); padding:24px 20px; display:flex; align-items:center;">
+                        <span style="font-size:12px; font-weight:700; color:var(--accent-light); letter-spacing:1px; text-transform:uppercase;">CRM and Pipeline</span>
+                    </div>
+                    <div style="background:var(--bg-3); padding:24px 28px;">
+                        <p style="font-size:14.5px; color:var(--muted-2);">Booked meetings move leads through your pipeline automatically. Deals update. Stages advance. Your CRM stays current without you touching it.</p>
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns:200px 1fr;">
+                    <div style="background:var(--accent-dim); border-right:1px solid var(--border-accent); padding:24px 20px; display:flex; align-items:center;">
+                        <span style="font-size:12px; font-weight:700; color:var(--accent-light); letter-spacing:1px; text-transform:uppercase;">Client Reporting</span>
+                    </div>
+                    <div style="background:var(--bg-3); padding:24px 28px;">
+                        <p style="font-size:14.5px; color:var(--muted-2);">Clients see their results in real time through their own portal. Progress updates automatically. No reports to compile, no calls to schedule, no "can you send me the numbers" emails.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 72px;">
+            <div class="section-intro" style="margin-bottom: 0;">
+                <span class="label">Why the alternatives don't cut it</span>
+            </div>
+            <div class="versus-grid" style="margin-top: 32px;">
+                <div class="versus-card">
+                    <div class="competitor">vs. Clay</div>
+                    <p class="verdict">Powerful, but expensive, still requires manual work, and your data never leaves its silo. You're feeding their product, not building yours.</p>
+                </div>
+                <div class="versus-card">
+                    <div class="competitor">vs. Notion</div>
+                    <p class="verdict">Great for docs. Useless for live agency data. Nothing connects to anything. Nobody updates it. It's organized chaos at best.</p>
+                </div>
+                <div class="versus-card">
+                    <div class="competitor">vs. OpenClaw</div>
+                    <p class="verdict">Autonomous is risky. Uncontrolled outreach under your domain is a compliance disaster waiting to happen. You need control, not a black box.</p>
+                </div>
+                <div class="versus-card">
+                    <div class="competitor">vs. Generic tools</div>
+                    <p class="verdict">Built for everyone means optimized for no one. Your data still lives in five places. You're just paying more and still guessing.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     FEATURES
+════════════════════════════════════════ -->
+<section id="features">
+    <div class="container section-pad">
+        <div class="section-intro">
+            <span class="label">Everything included</span>
+            <h2>The full stack of a modern cold email agency. In one app.</h2>
+            <p>
+                From lead sourcing to client reporting, built into one custom app that you own completely. No subscriptions, no dependencies, no data scattered across tabs.
+            </p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Centralized Dashboard</h3>
+                <p>Your entire agency in a single view. One login. One source of truth. Everything visible without opening another tab.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3>Real-Time Analytics</h3>
+                <p>Reply rates, conversion rates, cost per lead, cost per meeting, broken down by niche, region, and role. Know exactly where your money is going and what it's returning.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>AI Advisor</h3>
+                <p>Reads across all your campaigns, replies, and performance data. Tells you specifically where to double down and where to cut. Not just what the numbers are.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>AI Reply Summary</h3>
+                <p>Reads all replies and surfaces patterns in what's working. Spot trends across campaigns before you'd ever catch them manually.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔗</div>
+                <h3>LinkedIn Lead Sourcing</h3>
+                <p>Built-in lead scraping from LinkedIn with AI-powered research and personalized first-line generation, all inside the same app.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📧</div>
+                <h3>Campaign Management</h3>
+                <p>Cold email campaign management connected directly to Instantly.ai. Launch, monitor, and iterate without leaving your hub.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🗂️</div>
+                <h3>Built-In CRM</h3>
+                <p>Full pipeline with stages, deal tracking, and contact management. No separate CRM. No data living somewhere else. Yours, in your app.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👥</div>
+                <h3>Client Portal</h3>
+                <p>Clients log in and see their campaigns, leads, replies, and results in real time. No more update calls or "can you send the latest numbers" messages.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>AI Onboarding Wizard</h3>
+                <p>Upload a PDF or drop in a website URL and the app autofills the entire client profile. New client onboarding in minutes, not hours.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📍</div>
+                <h3>Progress Tracker</h3>
+                <p>Clients see exactly where their campaign is at every step. Eliminates "where are we at?" messages entirely.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔵</div>
+                <h3>LinkedIn Outreach</h3>
+                <p>Full LinkedIn outreach management inside the same app as your email campaigns. All outbound channels, one place.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>Brand Asset Management</h3>
+                <p>Store and organize brand assets per client. Everything where you need it, when you need it, organized by account and always accessible.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════
+     FOUNDER
+════════════════════════════════════════ -->
+<section id="story" style="background: var(--bg-2);">
+    <div class="container section-pad">
+        <div class="section-intro" style="margin-bottom: 0;">
+            <span class="label">Founder story</span>
+            <h2>Built from a real problem.</h2>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:20px; margin-bottom:40px;">
+            <img src="https://media.licdn.com/dms/image/v2/D5603AQFkjRhAHSPF5A/profile-displayphoto-scale_400_400/B56Z0HgbNOGYAk-/0/1773947438598?e=1779926400&v=beta&t=KROWRQmFmkIHfM2n7hdSF0znJ6QcIvM54FYycCKmu5E"
+                 alt="Andreas Gamez"
+                 style="width:64px; height:64px; border-radius:50%; object-fit:cover; border:2px solid var(--border-accent); flex-shrink:0;">
+            <div>
+                <div style="font-size:15px; font-weight:700; color:white;">Andreas Gamez</div>
+                <div style="font-size:13px; color:var(--muted); margin-top:2px;">Founder, Selfware</div>
+            </div>
+        </div>
+
+        <div class="founder-layout">
+            <div>
+                <p class="founder-quote">
+                    "I was running a lead gen agency, doing outbound for my own business, managing multiple clients, and switching between tools constantly. It got impossible to scale."
+                </p>
+                <p class="founder-body">
+                    The choice was hire a team or build something smarter. Building won.
+                </p>
+                <p class="founder-body">
+                    The result was a custom app that replaced what would cost $30,000+ a month in salaries and $1,000+ a month in tool spend. I own it. No fees, no vendor, no dependency.
+                </p>
+                <p class="founder-body">
+                    The most valuable thing it gave me wasn't saving time. It was having one place where all the data lived, and finally being able to see clearly what was actually working.
+                </p>
+                <p class="founder-body" style="margin-top: 16px;">
+                    Selfware exists to give other agency owners that same clarity and leverage. Not a developer guessing at what agencies need. Someone who runs one.
+                </p>
+            </div>
+
+            <div>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="num">$30K+</div>
+                        <div class="desc">Monthly salary cost replaced</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="num">$1K+</div>
+                        <div class="desc">Monthly tool spend eliminated</div>
+                    </div>
+                </div>
+                <div class="founder-note">
+                    <p>"Big companies build internal tools to get this kind of leverage. Now any agency owner can do the same, without a development team and without the overhead."</p>
+                    <p class="author">Andreas Gamez, Founder of Selfware</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     PRICING
+════════════════════════════════════════ -->
+<section id="pricing">
+    <div class="container section-pad">
+        <div class="section-intro">
+            <span class="label">Pricing</span>
+            <h2>Simple. Flat. Yours.</h2>
+            <p>
+                You pay once. You own the app, source code and all. No recurring fees, no vendor lock-in, no access that disappears if you stop paying. It's yours.
+            </p>
+        </div>
+
+        <div class="pricing-wrap">
+            <div class="pricing-card featured">
+                <div class="plan-name">Custom Build</div>
+                <div class="price"><sup>$</sup>2,000</div>
+                <div class="payment-note">50% upfront · 50% on delivery</div>
+                <ul class="pricing-list">
+                    <li>Custom app built around your specific workflow</li>
+                    <li>All 12 features included from day one</li>
+                    <li>2-week delivery guarantee</li>
+                    <li>Connected to your existing tools</li>
+                    <li>You own the source code outright</li>
+                    <li>No recurring fees. No dependencies. No lock-in.</li>
+                    <li>One round of revisions included</li>
+                </ul>
+                <div class="cta-wrap">
+                    <a href="#apply" class="btn-accent">Book a Demo</a>
+                </div>
+            </div>
+
+            <div class="pricing-card standard">
+                <div class="plan-name">Ongoing Updates</div>
+                <div class="price"><sup>$</sup>500<sub>/mo</sub></div>
+                <div class="payment-note">Optional · Cancel anytime</div>
+                <ul class="pricing-list">
+                    <li>Ongoing maintenance and updates</li>
+                    <li>New features as your agency grows</li>
+                    <li>Priority support</li>
+                    <li>Monthly strategy call</li>
+                    <li>New tool integrations on request</li>
+                </ul>
+                <div class="cta-wrap">
+                    <a href="#apply" class="btn-primary">Add to Your Build</a>
+                </div>
+            </div>
+        </div>
+
+        <p class="pricing-note">
+            Taking a limited number of builds per month to maintain quality. Apply to check current availability.
+        </p>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     FINAL CTA
+════════════════════════════════════════ -->
+<section id="apply" style="background: var(--bg-2);">
+    <div class="container">
+        <div class="final-cta">
+            <span class="label">Ready to build?</span>
+            <h2>Stop guessing.<br>Start seeing clearly.</h2>
+            <p>
+                Apply and let's scope your build. If it's not the right fit, I'll tell you. If it is, you'll have a working app in 2 weeks and you'll own it completely.
+            </p>
+            <div class="cta-actions">
+                <a href="mailto:hello@selfware.co" class="btn-accent" style="font-size: 16px; padding: 16px 36px;">
+                    Book a Demo →
+                </a>
+            </div>
+            <p class="cta-sub">
+                Or email directly: <a href="mailto:hello@selfware.co">hello@selfware.co</a>
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-logo">selfware</div>
+    <div>One hub. All your data. Total clarity.</div>
+    <div>© 2025 Selfware. All rights reserved.</div>
+</footer>
+
+</body>
+</html>
