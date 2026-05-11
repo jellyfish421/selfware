@@ -15,8 +15,8 @@ All colors are CSS custom properties defined in `:root` (around line 11). Change
     --text: #ffffff;        /* primary text */
     --muted: #606060;       /* very muted text / labels */
     --muted-2: #999999;     /* secondary body text */
-    --accent: #ffffff;      /* CTA button background + active indicators */
-    --accent-light: #cccccc;/* labels, pricing plan names, logo subtext */
+    --accent: #ffffff;      /* used for active indicators / borders */
+    --accent-light: #cccccc;/* subtle tints */
     --accent-dim: rgba(255,255,255,0.06);  /* icon bg, tag bg */
     --border: rgba(255,255,255,0.08);      /* default dividers */
     --border-2: rgba(255,255,255,0.14);    /* slightly stronger border */
@@ -27,10 +27,24 @@ All colors are CSS custom properties defined in `:root` (around line 11). Change
 }
 ```
 
-### To change the accent color (CTA buttons, active states)
-Change `--accent`. If you use a color (not white), also update `--accent-light`, `--accent-dim`, and `--border-accent` to tints of the same hue.
+### Current accent color: orange `#f97316`
 
-Remember: `.btn-accent` uses `color: #080808` (dark text) because the button background is white. If you switch `--accent` to a dark color, change `.btn-accent { color: ... }` to `white`.
+The brand accent is **orange (`#f97316`)**, hardcoded directly on the elements below (not via `--accent`). To change the accent color, do a find-and-replace of `#f97316` across the file. Also replace `rgba(249,115,22,` with the new color's rgba equivalent for the tinted backgrounds.
+
+Orange is currently applied to:
+- `.banner { background }` — top announcement bar
+- `.logo span` — the "ware" in the nav logo
+- `.btn-accent { background }` — all CTA buttons
+- `.label` — section eyebrow labels (THE PROBLEM, THE SOLUTION, etc.)
+- `.ai-hero-label` — the "The Centerpiece" pill in AI section
+- `.ai-pulse` — pulsing dot animation
+- `.mockup-ai-dot` and `.mockup-ai-title` — AI card in the hero mockup
+- `.mockup-nav-item.active { border-left }` — active nav item in mockup
+- `.feature-icon { background }` — icon backgrounds in features grid (as rgba tint)
+- `.pricing-card.featured { border-color }` — featured pricing card border
+- `pricing-list li::before` — checkmarks in pricing lists
+- Footer logo `span` — the "ware" in the footer logo
+- RevOps "Your Selfware AI advisor" header (inline HTML, ~line 1519)
 
 ### To change the overall darkness
 Change `--bg`, `--bg-2`, `--bg-3`. These cascade everywhere. Lighter values = less contrasty dark mode.
@@ -51,7 +65,7 @@ The `.light-section` class (defined right after `:root`) redefines all the same 
     --bg: #fafafa;
     --bg-2: #f4f4f4;
     --text: #080808;
-    --accent: #080808;      /* buttons become black in light sections */
+    --accent: #080808;
     --muted-2: #555555;
     /* ... etc */
     background: #ffffff;
@@ -69,38 +83,57 @@ Some elements have hardcoded dark backgrounds that sit inside a light section (t
 
 ## Hardcoded values (not controlled by variables)
 
-A few places bypass the CSS variable system and need manual edits if you're doing a big color change:
-
 | Location | Value | Why hardcoded |
 |---|---|---|
-| `.banner { background }` | `#080808` | Was `var(--accent)` but that's now white |
-| `.btn-accent { color }` | `#080808` | Dark text on white accent button |
-| `.mockup-nav-item.active { background }` | `rgba(255,255,255,0.08)` | Neutral white tint |
+| `.banner { background }` | `#f97316` | Orange brand color |
+| `.btn-accent { background }` | `#f97316` | Orange CTA button |
+| `.btn-accent { color }` | `white` | White text on orange button |
+| `.logo span { color }` | `#f97316` | Orange "ware" in nav logo |
+| `.label { color }` | `#f97316` | Orange section eyebrow labels |
+| `.ai-hero-label` | `#f97316` | Orange AI section pill |
+| `.ai-pulse` | `#f97316` | Orange pulse dot |
+| `.mockup-nav-item.active { border-left }` | `#f97316` | Orange active nav indicator |
+| `.feature-icon { background }` | `rgba(249,115,22,0.1)` | Orange-tinted icon bg |
+| `.pricing-card.featured { border-color }` | `rgba(249,115,22,0.35)` | Orange featured card border |
+| `.mockup-ai-dot / .mockup-ai-title` | `#f97316` | Orange AI card accent in mockup |
 | `.philosophy-box { background }` | `linear-gradient(#111111, #0d0d0d)` | Dark callout box |
 | `.mockup-ai-card { background }` | `linear-gradient(#111111, #0d0d0d)` | Dark AI card in mockup |
 | `.ai-demo { background }` | `linear-gradient(#111111, #0b0b0b)` | AI demo box |
-| `.pricing-card.featured { background }` | `linear-gradient(#111111, #0d0d0d)` | Dark featured card |
-| RevOps compare card (inline HTML, ~line 1518) | `linear-gradient(#111111, #0d0d0d)` | Dark "Selfware" compare card |
-| Founder name (inline HTML, ~line 1734) | `color:white` | Sits in a dark section |
+| `.pricing-card.featured { background }` | `linear-gradient(#111111, #0d0d0d)` | Dark featured pricing card |
+| RevOps compare card (inline HTML, ~line 1519) | `linear-gradient(#111111, #0d0d0d)` | Dark "Selfware" compare card |
+| Founder name (inline HTML) | `color:white` | Sits in a dark section |
+| Footer logo span | `color:#f97316` | Orange "ware" in footer logo |
 
 ---
 
 ## Page sections (in order)
 
 ```
-Banner          — .banner                       always dark
-Nav             — nav                           sticky, dark
-Hero            — #hero-wrap                    dark, CSS mockup in background
+Banner          — .banner                       orange background, always visible
+Nav             — nav                           sticky, dark, logo = "self" white + "ware" orange
+Hero            — #hero-wrap                    dark, CSS dashboard mockup in background
+                  — credibility line below CTA: "Built for lead gen agencies by a lead gen agency..."
 Problem         — #problem.light-section        WHITE background
 AI Advisor      — #ai-advisor                   dark
-RevOps          — (no id, style=bg-2)           dark
+RevOps          — (no id)                       dark
 Solution        — #solution                     dark
 Features        — #features.light-section       WHITE background
 Founder         — #story                        dark
 Pricing         — #pricing.light-section        WHITE background
 Final CTA       — #apply                        dark
-Footer          — footer                        dark
+Footer          — footer                        dark, logo = "self" white + "ware" orange
 ```
+
+---
+
+## Logo files
+
+`logo-generator.html` — open in a browser to download PNG exports of the logo. Currently generates:
+- Wordmark (640×120): transparent bg + black bg
+- Profile picture (500×500): transparent bg + black bg, logo centered
+
+`logo.svg` — transparent background SVG wordmark
+`logo-black-bg.svg` — black background SVG wordmark
 
 ---
 
@@ -111,3 +144,4 @@ All "Book a Demo" buttons point to `https://cal.com/jellyfishnocode/selfware`. S
 ## Deployment
 
 Push to `master` branch on `jellyfish421/selfware`. GitHub Pages serves it at `selfwaredev.com`.
+HTTPS certificate: Let's Encrypt via GitHub Pages. If DNS check is stuck, remove and re-add the custom domain in repo Settings → Pages to force a fresh check.
